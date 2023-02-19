@@ -11,6 +11,7 @@ public class MainFrame extends JFrame {
         super(title);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setContentPane(mainPanel);
+        setResizable(false);
         pack();
         setVisible(true);
     }

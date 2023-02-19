@@ -1,6 +1,7 @@
 package it.casa.sacdextract.gui.listeners;
 
 import it.casa.sacdextract.gui.MainPanel;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -10,7 +11,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class RunButtonListener implements ActionListener {
 
@@ -19,10 +22,6 @@ public class RunButtonListener implements ActionListener {
     private JRadioButton multiChannelBtn;
 
     private List<String> filesList = new ArrayList<>();
-
-    private static final String CMD_STEREO = "\"%s\" -2 -s -A -a -i \"%s\"";
-
-    private static final String CMD_MULTI_CHANNEL = "\"%s\" -m -s -A -a -i \"%s\"";
 
     private PrintStream ps;
 
@@ -34,27 +33,46 @@ public class RunButtonListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        for (int i = 0; i < mainPanel.getFilesPanel().getList().getModel().getSize(); i++) {
-            String item = mainPanel.getFilesPanel().getList().getModel().getElementAt(i);
+        IntStream.range(0, mainPanel.getFilesPanel().getList().getModel().getSize()).forEach(p -> {
+            var item = mainPanel.getFilesPanel().getList().getModel().getElementAt(p);
             filesList.add(item);
-            System.out.printf("%nItem %d selected: %s", i+1, item);
-        }
+            System.out.printf("%nItem %d selected: %s", p+1, item);
+        });
 
+        List<String> cmd;
         for (String filePath : filesList) {
-            String cmd;
-            if (multiChannelBtn.isSelected()) {
-                cmd = String.format(CMD_MULTI_CHANNEL, mainPanel.getExecutablePanel().getSacdField().getText(), filePath);
-            } else {
-                cmd = String.format(CMD_STEREO, mainPanel.getExecutablePanel().getSacdField().getText(), filePath);
-            }
-            System.out.printf("%n%s", cmd);
-            ProcessBuilder builder = new ProcessBuilder(cmd);
+            cmd = new ArrayList<>(Collections.singleton(mainPanel.getExecutablePanel().getSacdField().getText()));
+
+            if(multiChannelBtn.isSelected())
+                cmd.add("--mch-tracks");
+            else cmd.add("--2ch-tracks");
+
+            if (mainPanel.getOptionsPanel().getDsdiffEditMasterBtn().isSelected())
+                cmd.add("--output-dsdiff-em");
+            else if (mainPanel.getOptionsPanel().getDsdiffBtn().isSelected())
+                cmd.add("--output-dsdiff");
+            else if (mainPanel.getOptionsPanel().getDsfBtn().isSelected())
+                cmd.add("--output-dsf");
+            else cmd.add("--output-iso");
+
+            if (mainPanel.getOptionsPanel().getExportCueChkBox().isSelected())
+                cmd.add("--export-cue");
+            if (mainPanel.getOptionsPanel().getPrintChkBox().isSelected())
+                cmd.add("--print");
+            if (mainPanel.getOptionsPanel().getArtistChkBox().isSelected())
+                cmd.add("--artist");
+            if (mainPanel.getOptionsPanel().getPerformerChkBox().isSelected())
+                cmd.add("--performer");
+
+            cmd.add(String.format("--input \"%s\"", filePath));
+            System.out.printf("%n%s", String.join(StringUtils.SPACE, cmd));
+            /*var builder = new ProcessBuilder(String.join(StringUtils.SPACE, cmd));
             try {
                 var process = builder.start();
                 printResults(process);
             } catch (IOException ex) {
                 ex.printStackTrace(ps);
-            }
+            }*/
         }
     }
 

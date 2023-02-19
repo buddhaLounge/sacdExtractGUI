@@ -16,7 +16,7 @@ public class ExecutablePanel extends JPanel {
     private Border sacdBorder = new BorderUIResource.TitledBorderUIResource(new EmptyBorder(5,0,5,0),
             "SACD executable path", TitledBorder.CENTER, TitledBorder.CENTER);
 
-    private LayoutManager executableLayout = new BoxLayout(this, BoxLayout.PAGE_AXIS);
+    private LayoutManager executableLayout = new BoxLayout(this, BoxLayout.X_AXIS);
 
     private JTextField sacdField = new JTextField("Press Browse button to set the SACD executable path");
 
@@ -29,18 +29,14 @@ public class ExecutablePanel extends JPanel {
         setLayout(executableLayout);
         setBorder(sacdBorder);
 
-        JPanel sacdPanel = new JPanel();
-        sacdPanel.setLayout(new BoxLayout(sacdPanel, BoxLayout.X_AXIS));
         sacdField.setEnabled(false);
         sacdExecutableFileChooser.setDialogTitle("Set SACD executable path");
         sacdExecutableFileChooser.setFileFilter(new FileNameExtensionFilter("sacd_extract.exe", "exe"));
         sacdExecutableFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         browseSACDBtn.addActionListener(new BrowseExecutableListener(this, mainPanel,
                 sacdExecutableFileChooser, sacdField, "sacd_extract.exe"));
-        sacdPanel.add(sacdField);
-        sacdPanel.add(browseSACDBtn);
-
-        add(sacdPanel);
+        add(sacdField);
+        add(browseSACDBtn);
     }
 
     public JTextField getSacdField() {
