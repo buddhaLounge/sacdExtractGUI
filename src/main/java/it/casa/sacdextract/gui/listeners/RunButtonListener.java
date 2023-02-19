@@ -41,7 +41,8 @@ public class RunButtonListener implements ActionListener {
 
         List<String> cmd;
         for (String filePath : filesList) {
-            cmd = new ArrayList<>(Collections.singleton(mainPanel.getExecutablePanel().getSacdField().getText()));
+            cmd = new ArrayList<>();
+            cmd.add(String.format("\"%s\"", mainPanel.getExecutablePanel().getSacdField().getText()));
 
             if(multiChannelBtn.isSelected())
                 cmd.add("--mch-tracks");
@@ -66,13 +67,13 @@ public class RunButtonListener implements ActionListener {
 
             cmd.add(String.format("--input \"%s\"", filePath));
             System.out.printf("%n%s", String.join(StringUtils.SPACE, cmd));
-            /*var builder = new ProcessBuilder(String.join(StringUtils.SPACE, cmd));
+            var builder = new ProcessBuilder(String.join(StringUtils.SPACE, cmd));
             try {
                 var process = builder.start();
                 printResults(process);
             } catch (IOException ex) {
                 ex.printStackTrace(ps);
-            }*/
+            }
         }
     }
 
