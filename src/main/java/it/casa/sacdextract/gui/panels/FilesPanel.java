@@ -38,7 +38,7 @@ public class FilesPanel extends JPanel {
         setBorder(filesBorder);
 
         chooser.setDialogTitle("Add ISO File");
-        chooser.setFileFilter(new FileNameExtensionFilter("ISO file", "iso"));
+        chooser.setFileFilter(new FileNameExtensionFilter("ISO files", "iso"));
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
         listISOFiles.setEnabled(false);

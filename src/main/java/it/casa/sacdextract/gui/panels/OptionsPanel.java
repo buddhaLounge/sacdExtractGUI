@@ -27,7 +27,7 @@ public class OptionsPanel extends JPanel {
     public OptionsPanel(MainPanel mainPanel, PrintStream ps) {
         super();
         setBorder(optionsBorder);
-        setLayout(new GridLayout(1, 3));
+        setLayout(new GridLayout(1,4));
 
         group.add(stereoBtn);
         group.add(multiChannelBtn);
@@ -35,8 +35,12 @@ public class OptionsPanel extends JPanel {
         runBtn.setEnabled(false);
         runBtn.addActionListener(new RunButtonListener(mainPanel, multiChannelBtn, ps));
 
-        add(stereoBtn);
-        add(multiChannelBtn);
+        JPanel channelPanel = new JPanel();
+        channelPanel.setLayout(new BoxLayout(channelPanel, BoxLayout.Y_AXIS));
+        channelPanel.add(stereoBtn);
+        channelPanel.add(multiChannelBtn);
+
+        add(channelPanel);
         add(runBtn);
     }
 

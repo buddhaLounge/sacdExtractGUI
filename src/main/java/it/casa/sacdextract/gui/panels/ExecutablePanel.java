@@ -14,7 +14,7 @@ import java.awt.*;
 public class ExecutablePanel extends JPanel {
 
     private Border sacdBorder = new BorderUIResource.TitledBorderUIResource(new EmptyBorder(5,0,5,0),
-            "SACD and ffMPEG Executable Path", TitledBorder.CENTER, TitledBorder.CENTER);
+            "SACD executable path", TitledBorder.CENTER, TitledBorder.CENTER);
 
     private LayoutManager executableLayout = new BoxLayout(this, BoxLayout.PAGE_AXIS);
 
